@@ -1,13 +1,14 @@
 import CardList
+from Event import *
 from Utils import *
 class Deck(CardList.CardList):
     """description of class"""
     def __init__(self,cards,player,fatigue=0):
         super().__init__(cards)
         self.player=player
-        self.maxCards=60
+        self.maxCards=60#?num
         self._fatigue=_Int(fatigue)
-        self.cardbuffs=[]
+        #self.cardbuffs=[]
 
     
     def draw(self):
@@ -20,46 +21,58 @@ class Deck(CardList.CardList):
         self._cards=self._cards
 
     def fatigue(self,sender=self):
-        if(self.battleGround.beforeTrigger(sender, "BeforeFatigue", target, damage)):
-            self.battleGround.eventTrigger(sender, "OnFatigue", target, damage)
-            self.battleGround.eventTrigger(sender, "AfterFatigue", target, damage)
+        self.fatigueGrow()
+        beforeFatigueEvent=BeforeFatigueEvent(sender, "BeforeFatigue", self.player.getHero(), self._fatigue)
+        event=self.battleGround.trigger(beforeFatigueEvent)
+        if(event.permission):
+            #self.battleGround.trigger(sender, "OnDraw", self, num)
+            self.onFatigue(event)
+            afterFatigueEvent=AfterFatigueEvent(sender, "AfterFatigue", self.player.getHero(), event)
+            self.battleGround.trigger(afterFatigueEvent)
 
     def fatigueGrow(self,sender=self):
-        if(self.battleGround.beforeTrigger(sender, "BeforeFatigueGrow", target, delta)):
-            self.battleGround.eventTrigger(sender, "OnFatigueGrow", target, delta)
-            self.battleGround.eventTrigger(sender, "AfterFatigueGrow", target, delta)
+        beforeFatigueGrowEvent=BeforeFatigueGrowEvent(sender, "BeforeFatigueGrow", self, 1)#?num
+        event=self.battleGround.trigger(beforeFatigueGrowEvent)
+        if(event.permission):
+            #self.battleGround.trigger(sender, "OnDraw", self, num)
+            self.onFatigueGrow(event)
+            afterFatigueGrowEvent=AfterFatigueGrowEvent(sender, "AfterFatigueGrow", self, event)
+            self.battleGround.trigger(afterFatigueGrowEvent)
+    
+    def onFatigue(self,event):
+        event.target.takeDamage(event.value)
+
+    def onFatigueGrow(self,event):
+        self._fatigue=self._fatigue+event.value
 
     def getFatigueDamage(self,sender):
         damage=self._fatigue
-        return damage
-    #def getFatigueTarget(self,sender):
-    #    target=self.player.getHero()
-    #    return target
+        getFatigueDamageEvent=GetFatigueDamageEvent(sender,"GetFatigueDamage",self.player.getHero(),damage)
+        event=self.battleGround.trigger(getFatigueDamageEvent)
+        return event.value
 
     def getFatigueGrowth(self,sender):
-        delta=1 #?num
-        return delta
-    #def getFatigueGrowTarget(self,sender):
-    #    target=self._fatigue
-    #    target=self.battleGround.getTrigger(sender, "GetFatigueGrowTarget", self, target)
-    #    return target
+        delta=1#?num
+        getFatigueGrowthEvent=GetFatigueGrowthEvent(sender,"GetFatigueGrowth",self,delta)
+        event=self.battleGround.trigger(getFatigueGrowthEvent)
+        return event.value
 
-     # BasicBehaviour
-    #region
-    def BasicFatigue(self,event):
-        event.target.takeDamage(event.value)
-    def getBasicBehaviour_Fatigue(self):
-        cardbuff=CardBuff(self.player)
-        cardbuff.triggers["OnFatigue"]=self.BasicFatigue
-        return cardbuff
+    # # BasicBehaviour
+    ##region
+    #def BasicFatigue(self,event):
+    #    event.target.takeDamage(event.value)
+    #def getBasicBehaviour_Fatigue(self):
+    #    cardbuff=CardBuff(self.player)
+    #    cardbuff.triggers["OnFatigue"]=self.BasicFatigue
+    #    return cardbuff
 
-    def BasicFatigueGrow(self,event):
-        target=target+value
-    def getBasicBehaviour_FatigueGrow(self):
-        cardbuff=CardBuff(self.player)
-        cardbuff.triggers["OnFatigueGrow"]=self.BasicFatigueGrow
-        return cardbuff
-    #endregion
+    #def BasicFatigueGrow(self,event):
+    #    target=target+value
+    #def getBasicBehaviour_FatigueGrow(self):
+    #    cardbuff=CardBuff(self.player)
+    #    cardbuff.triggers["OnFatigueGrow"]=self.BasicFatigueGrow
+    #    return cardbuff
+    ##endregion
     
     #def getLength(self,sender=None):
     #    length=len(self.cards)

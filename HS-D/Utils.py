@@ -43,42 +43,49 @@ class _Int:
             self.data=self.data + other.data
         if(isinstance(other,int)):
             self.data=self.data + other
+        return self
 
     def __mul__(self,other):
         if(isinstance(other,_Int)):
             self.data=self.data * other.data
         if(isinstance(other,int)):
             self.data=self.data * other
+        return self
     
     def __sub__(self,other):
         if(isinstance(other,_Int)):
             self.data=self.data - other.data
         if(isinstance(other,int)):
             self.data=self.data - other
+        return self
 
     def __truediv__(self,other): #override to floordiv
         if(isinstance(other,_Int)):
             self.data=self.data // other.data
         if(isinstance(other,int)):
             self.data=self.data // other
+        return self
 
     def __floordiv__(self,other): #override to truediv
         if(isinstance(other,_Int)):
             self.data=self.data / other.data
         if(isinstance(other,int)):
             self.data=self.data / other
+        return self
 
     def __mod__(self,other): 
         if(isinstance(other,_Int)):
             self.data=self.data % other.data
         if(isinstance(other,int)):
             self.data=self.data % other
+        return self
 
     def __pow__(self,other): 
         if(isinstance(other,_Int)):
             self.data=self.data ** other.data
         if(isinstance(other,int)):
             self.data=self.data ** other
+        return self
 
     def get(self):
         return self.value
@@ -86,83 +93,83 @@ class _Int:
     def set(self,value):
         self.value=value
 
-class Limited_Int(_Int):
-    def __init__(self, max, min=None, value=None):
-        self.max=max
-        self.min=min
-        if(value!=None):
-            self.value=value
-        else:
-            self.value=max
+#class Limited_Int(_Int):
+#    def __init__(self, max, min=None, value=None):
+#        self.max=max
+#        self.min=min
+#        if(value!=None):
+#            self.value=value
+#        else:
+#            self.value=max
 
-    def __eq__(self, value):
-        if(isinstance(other,_Int)):
-            return self.value==other.value
-        if(isinstance(other,int)):
-            return self.value==other
-        return false
+#    def __eq__(self, value):
+#        if(isinstance(other,_Int)):
+#            return self.value==other.value
+#        if(isinstance(other,int)):
+#            return self.value==other
+#        return false
 
-    def __add__(self, other):
-        super().__add__(other)
-        if(self.value>max):
-            self.value=max
-        if(min!=None):
-            if(self.value<min):
-                self.value=min
+#    def __add__(self, other):
+#        super().__add__(other)
+#        if(self.value>max):
+#            self.value=max
+#        if(min!=None):
+#            if(self.value<min):
+#                self.value=min
 
-    def __mul__(self,other):
-        super().__mul__(other)
-        if(self.value>max):
-            self.value=max
-        if(min!=None):
-            if(self.value<min):
-                self.value=min
+#    def __mul__(self,other):
+#        super().__mul__(other)
+#        if(self.value>max):
+#            self.value=max
+#        if(min!=None):
+#            if(self.value<min):
+#                self.value=min
     
-    def __sub__(self,other):
-        super().__sub__(other)
-        if(self.value>max):
-            self.value=max
-        if(min!=None):
-            if(self.value<min):
-                self.value=min
+#    def __sub__(self,other):
+#        super().__sub__(other)
+#        if(self.value>max):
+#            self.value=max
+#        if(min!=None):
+#            if(self.value<min):
+#                self.value=min
 
-    def __truediv__(self,other): #override to floordiv
-        super().__truediv__(other)
-        if(self.value>max):
-            self.value=max
-        if(min!=None):
-            if(self.value<min):
-                self.value=min
+#    def __truediv__(self,other): #override to floordiv
+#        super().__truediv__(other)
+#        if(self.value>max):
+#            self.value=max
+#        if(min!=None):
+#            if(self.value<min):
+#                self.value=min
 
-    def __floordiv__(self,other): #override to truediv
-        super().__floordiv__(other)
-        if(self.value>max):
-            self.value=max
-        if(min!=None):
-            if(self.value<min):
-                self.value=min
+#    def __floordiv__(self,other): #override to truediv
+#        super().__floordiv__(other)
+#        if(self.value>max):
+#            self.value=max
+#        if(min!=None):
+#            if(self.value<min):
+#                self.value=min
 
-    def __mod__(self,other): 
-        super().__mod__(other)
-        if(self.value>max):
-            self.value=max
-        if(min!=None):
-            if(self.value<min):
-                self.value=min
+#    def __mod__(self,other): 
+#        super().__mod__(other)
+#        if(self.value>max):
+#            self.value=max
+#        if(min!=None):
+#            if(self.value<min):
+#                self.value=min
 
-    def __pow__(self,other): 
-        super().__pow__(other)
-        if(self.value>max):
-            self.value=max
-        if(min!=None):
-            if(self.value<min):
-                self.value=min
+#    def __pow__(self,other): 
+#        super().__pow__(other)
+#        if(self.value>max):
+#            self.value=max
+#        if(min!=None):
+#            if(self.value<min):
+#                self.value=min
 
-    def get(self):
-        return self.value
+#    def get(self):
+#        return self.value
 
-    def set(self,value):
-        self.value=value
+#    def set(self,value):
+#        self.value=value
 
 
 

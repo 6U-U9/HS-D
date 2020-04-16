@@ -26,7 +26,7 @@ class BattleGround:
         event=self.trigger(self, beforeGameStartEvent)
         if(event.permission):
             self.onGameStart()
-            afterGameStartEvent=AfterGameStartEvent(self,"AfterGameStart",self,None)
+            afterGameStartEvent=AfterGameStartEvent(self,"AfterGameStart",self,event)
             self.trigger(self, afterGameStartEvent)
 
     def mulligan(self):
@@ -78,6 +78,9 @@ class BattleGround:
     #        event=entity.trigger(event)
     #    return event
     #    return permission #bool, which indicates whether the action should go on 
+
+    def onGameStart(self):
+        pass
 
     def getChosenObject(self):
         return []

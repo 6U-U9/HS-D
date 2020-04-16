@@ -34,9 +34,9 @@ class CardBuff:
         self.holder=holder
 
     def trig(self,event):
-        if(not event.action in self.triggers.keys()):
-            return
-        self.triggers[event.action](event)
+        for key in self.triggers.keys():
+            if(isinstance (event,key)):
+                self.triggers[event](event)
 
     def isTarget(self,card):
         return True
