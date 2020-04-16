@@ -1,4 +1,5 @@
 from Player import *
+from Event import *
 import Utils
 MAX_TURN_NUM=30
 
@@ -9,28 +10,74 @@ class BattleGround:
         self.triggers={}
         self.players=[]
         self.utils=Utils.Utils()
+        self.order=[]
+        #self.turnSeq=[]
+        self.onPlayPlayer=None
+        self.logs=[]
+        self.entities=[]
+        
+    def initGame(self):
         for deck in self.initDecks:
             self.players.append(Player(deck)) 
-        self.turnSeq=[]
-        self.player_OnPlay=None
-        self.logs=[]
-        
+        self.genTurnOrder()
+
     def gameStart(self):
+        beforeGameStartEvent=BeforeGameStartEvent(self,"BeforeGameStart",self,None)
+        event=self.trigger(self, beforeGameStartEvent)
+        if(event.permission):
+            self.onGameStart()
+            afterGameStartEvent=AfterGameStartEvent(self,"AfterGameStart",self,None)
+            self.trigger(self, afterGameStartEvent)
+
+    def mulligan(self):
         for player in self.players:
-            player.mulligan()
+            if(self.order.index(player)==0):
+                event1=player.startMulligan(3)
+            if(self.order.index(player)==1):
+                event2=player.startMulligan(4)
+                #player.hand.cards.append("Coin")
+        #wait for choose
+        for player in self.players:
+            player.endMulligan()
 
     def nextTurn(self):
-        if(len(self.turnSeq)==0):
-            for player in self.players:
-                player.gameDraw()
-            return
-        player=self.turnSeq.pop[0]
-        player.turnStart();
-        self.player_OnPlay=player
+        player=self.getNextTurnPlayer()
+        self.onPlayPlayer=player
+        player.turnStart()
 
-    def genTurnSeq(self):
-        order=utils.shuffle(players)
-        self.turnSeq=order*MAX_TURN_NUM
+    def genTurnOrder(self):
+        self.order=utils.shuffle(players)
+        #self.turnSeq=self.order*MAX_TURN_NUM
+
+    def getNextTurnPlayer(self):
+        if(onPlayPlayer==None):
+            nextTurnPlayer=self.order[0]
+        else:
+            i=self.order.index(onPlayPlayer)
+            if (i<len(self.order)):
+                nextTurnPlayer=self.order[i+1]
+            else:
+                nextTurnPlayer=self.order[0]
+        getNextTurnPlayer=GetNextTurnPlayerEvent(self,"GetNextTurnPlayer",self, nextTurnPlayer)
+        event=self.trigger(event)
+        return event.value
+
+
+    def trigger(self, event):
+        for entity in self.entities:
+            event=entity.trigger(event)
+        return event
+
+    #def eventTrigger(self, event):
+    #    for entity in self.entities:
+    #        event=entity.trigger(event)
+    #    return event
+
+    #def beforeTrigger(self, event):
+    #    for entity in self.entities:
+    #        event=entity.trigger(event)
+    #    return event
+    #    return permission #bool, which indicates whether the action should go on 
 
     def getChosenObject(self):
         return []
